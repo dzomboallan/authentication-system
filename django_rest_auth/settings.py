@@ -82,6 +82,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "django_rest_auth.wsgi.application"
 
+CORS_ALLOW_ALL_CREDENTIALS=True
+CORS_ALLOW_ALL_ORIGINS=True
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:5173/"
+]
+
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -104,6 +111,10 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+GOOGLE_CLIENT_ID=env("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET=env("GOOGLE_CLIENT_SECRET")
+SOCIAL_AUTH_PASSWORD="jghst56787suhjgx"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -146,7 +157,3 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL='larancharm@info.com'
 EMAIL_PORT = '2525'
 EMAIL_USE_TLS=True
-
-GOOGLE_CLIENT_ID = env('GOOGLE_CLIENT_ID')
-GOOGLE_CLIENT_SECRET = env('GOOGLE_CLIENT_SECRET')
-SOCIAL_AUTH_PASSWORD = env('SOCIAL_PASSWORD')
