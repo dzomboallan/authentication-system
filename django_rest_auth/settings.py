@@ -32,7 +32,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*', 'http://localhost:3000']
 
 
 # Application definition
@@ -102,7 +102,9 @@ DATABASES = {
 
 AUTH_USER_MODEL="accounts.User"
 REST_FRAMEWORK = {
+    'NON_FIELD_ERROR_KEY':'error',
     'DEFAULT_AUTHENTICATION_CLASSES':(
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
@@ -112,9 +114,14 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
+DOMAIN='localhost:5173'
+SITE_NAME= 'Django Authentication System'
+
 GOOGLE_CLIENT_ID=env("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET=env("GOOGLE_CLIENT_SECRET")
 SOCIAL_AUTH_PASSWORD="jghst56787suhjgx"
+GITHUB_CLIENT_ID=env("GITHUB_CLIENT_ID")
+GITHUB_CLIENT_SECRET=env("GITHUB_CLIENT_SECRET")
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

@@ -1,10 +1,12 @@
+from ast import Expression
+from multiprocessing import context
 from django.shortcuts import render
 from rest_framework.generics import GenericAPIView
 from .serializers import UserRegisterSerializer, LoginSerializer, PasswordResetRequestSerializer, SetNewPasswordSerializer, LogoutUserSerializer
 from rest_framework.response import Response
 from rest_framework import status 
 from rest_framework.permissions import IsAuthenticated  
-from .utils import send_code_to_user
+from .utils import send_generated_otp_to_email
 from .models import OneTimePassword, User
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import smart_str, DjangoUnicodeDecodeError
@@ -15,16 +17,16 @@ class RegisterUserView(GenericAPIView):
     serializer_class = UserRegisterSerializer
 
     def post(self, request):
-        user_data=request.data
-        serializer = self.serializer_class(data=user_data)
+        user=request.data
+        serializer = self.serializer_class(data=user)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            user=serializer.data
-            send_code_to_user(user['email'])# In production this email can be sent using celery to avoid delay
+            user_data=serializer.data
+            send_generated_otp_to_email(user_data['email'], request)# In production this email can be sent using celery to avoid delay
 
             # Send email function user['email']
             return Response({
-                'data':user,
+                'data':user_data,
                 'message':f'hi thanks for signing up a passcode has been sent to your email'
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -33,8 +35,9 @@ class VerifyUserEmail(GenericAPIView):
     def post(self, request):
         otpcode = request.data.get('otp')
         try:
-            user_code_obj = OneTimePassword.objects.get(code=otpcode)
-            user = user_code_obj.user
+            passcode = request.data.get('otp')
+            user_pass_obj = OneTimePassword.objects.get(otp=passcode)
+            user = user_pass_obj.user
             if not user.is_verified:
                 user.is_verified=True
                 user.save()
@@ -44,7 +47,7 @@ class VerifyUserEmail(GenericAPIView):
             return Response({
                 "message":"code is invalid, user already verified."
             }, status=status.HTTP_204_NO_CONTENT)
-        except OneTimePassword.DoesNotExist:
+        except OneTimePassword.DoesNotExist as identifier:
             return Response({
                 "message":"passcode not provided"
             }, status=status.HTTP_404_NOT_FOUND)
@@ -84,7 +87,7 @@ class PasswordResetConfirm(GenericAPIView):
                 return Response({'message':"Token is invalid or has expired"}, status=status.HTTP_401_UNAUTHORIZED)
             return Response({'success':True, 'message':"Credential is valid", 'uidb64':uidb64, 'token':token}, status=status.HTTP_200_OK)
         
-        except DjangoUnicodeDecodeError:
+        except DjangoUnicodeDecodeError as identifier:
             return Response({'message':"Token is invalid or has expired"}, status=status.HTTP_401_UNAUTHORIZED)
         
 class SetNewPassword(GenericAPIView):

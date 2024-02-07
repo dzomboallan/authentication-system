@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import './App.css';
 import { ToastContainer } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Signup, Login, Profile, VerifyEmail, ForgetPassword} from "./components"
 import './App.css'
+import PasswordRequest from './components/PasswordRequest'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
@@ -17,7 +17,8 @@ function App() {
           <Route path='/login' element={<Login/>} />
           <Route path='/dashboard' element={<Profile/>} />
           <Route path='/otp/verify' element={<VerifyEmail/>} />
-          <Route path='/forget_password' element={<ForgetPassword/>} />
+          <Route path='/forget-password' element={<ForgetPassword/>} />
+          <Route path='/password-reset-confirm/:uid/:token' element={<PasswordRequest/>} />
         </Routes>
       </Router>
     </>

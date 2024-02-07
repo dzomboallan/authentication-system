@@ -1,5 +1,8 @@
+import json
+from dataclasses import field
 from rest_framework import serializers
 from .models import User
+from string import ascii_lowercase, ascii_uppercase
 from django.contrib.auth import authenticate
 from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -57,13 +60,13 @@ class LoginSerializer(serializers.ModelSerializer):
         
         if not user.is_verified:
             raise AuthenticationFailed("Email is not verified")
-        user_tokens =user.tokens()
+        tokens =user.tokens()
 
         return {
             'email':user.email,
             'full_name':user.get_full_name,
-            'access_token': str(user_tokens.get('access')),
-            'refresh_token':str(user_tokens.get('refresh'))
+            'access_token': str(tokens.get('access')),
+            'refresh_token':str(tokens.get('refresh'))
         }
     
 class PasswordResetRequestSerializer(serializers.Serializer):
@@ -79,10 +82,11 @@ class PasswordResetRequestSerializer(serializers.Serializer):
             uidb64=urlsafe_base64_encode(smart_bytes(user.id))
             token=PasswordResetTokenGenerator().make_token(user)
             request=self.context.get('request')
-            site_domain=get_current_site(request).domain
+            current_site=get_current_site(request).domain
             relative_link=reverse('password-reset-confirm', kwargs={'uidb64':uidb64, 'token':token})
-            abslink=f'http://{site_domain}{relative_link}'
-            email_body=f'Hi use the link below to reset your password \n {abslink}'
+            abslink=f'http://{current_site}{relative_link}'
+            print(abslink)
+            email_body=f'Hi use the link below to reset your password {abslink}'
 
             data={
                 'email_body':email_body,

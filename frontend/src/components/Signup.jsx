@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useEffect, useState} from 'react'
 import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -18,24 +18,37 @@ const Signup = () => {
     const handleOnChange = (e) =>{
         setFormData({...formdata, [e.target.name]:e.target.value})
     }
-    
+
+    const handleSigninWithGoogle = async (response)=>{
+        const payload = response.credential
+        const server_res = await axios.post("http://localhost:8000/api/v1/auth/google/", {'access_token':payload})
+        console.log(server_res.data)
+    }
+
+    useEffect(() => {
+        /** global google */
+        google.accounts.id.initialize({
+            client_id:process.env.REACT_APP_GOOGLE_CLIENT_ID,
+            callback: handleSigninWithGoogle
+        });
+        google.accounts.id.renderButton(
+            document.getElementById("signInDiv"),
+            {theme:"outline", size:"large", text:"continue_with", shape:"circle", width:"280"}
+        );
+    }, [])
+        
     const {email, first_name, last_name, password, password2} = formdata
+
     const handleSubmit = async (e) =>{
         e.preventDefault()
-        if(!email || !first_name || !last_name || !password || !password2){
-            setError("All fields are required")
-        }else{
-            // make call to api
-            const res = await axios.post("http://localhost:8000/api/v1/auth/register/", formdata)
-
-            // check response
-            const response = res.data
-            if(res.status == 201){
-                // redirect to verifyemail component
-                navigate("/otp/verify")
-                toast.success(response.message)
-            }
-        }        
+        const response = await axios.post('http://localhost:8000/api/v1/auth/register/', formdata)
+        console.log(response.data)
+        const result=response.data
+        if(response.status == 201){
+            // redirect to verifyemail component
+            navigate("/otp/verify")
+            toast.success(result.message)
+        }       
     }
   
   return (
@@ -73,7 +86,7 @@ const Signup = () => {
                     <button>Sign up with Github</button>
                 </div>
                 <div className='googleContainer'>
-                    <button>Sigh up with Google</button>
+                    <div id="signInDiv" className="gsignIn"></div>
                 </div>
             </div>
         </div>

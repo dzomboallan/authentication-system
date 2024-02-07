@@ -1,6 +1,6 @@
 import axios from 'axios'
-import jwt_decode from "jwt-decode"
-import dayjs from "dayjs"
+import { jwtDecode} from "jwt-decode";
+import dayjs from "dayjs";
 
 let accessToken=localStorage.getItem('token') ? JSON.parse(localStorage.getItem('token')) : ""
 let refresh_token=localStorage.getItem('refresh_token') ? JSON.parse(localStorage.getItem('refresh_token')) : ""
@@ -11,13 +11,13 @@ const baseURL='http://localhost:8000/api/v1/'
 const AxiosInstance = axios.create({
     baseURL:baseURL,
     'Content-type':'application/json',
-    headers: {Authorisation: localStorage.getItem('token') ? `Bearer ${accessToken}` : ""},
+    headers: {Authorization: localStorage.getItem('token') ? `Bearer ${accessToken}` : ""},
 });
 
 AxiosInstance.interceptors.request.use(async req =>{
     if (accessToken){
         req.headers.Authorization = localStorage.getItem('token') ? `Bearer ${accessToken}` : ""
-        const user = jwt_decode(accessToken)
+        const user = jwtDecode(accessToken)
         const isExpired=dayjs.unix(user.exp).diff(dayjs()) < 1
         if(!isExpired) return req
         const resp  = await axios.post(`${baseURL}auth/token/refresh`, {
@@ -27,6 +27,8 @@ AxiosInstance.interceptors.request.use(async req =>{
         localStorage.setItem('token', JSON.stringify(resp.data.access))
         req.headers.Authorization = `Bearer ${resp.data.access}`
         return req
+    }else{
+        req.headers.Authorization = localStorage.getItem('token') ? `Bearer ${JSON.parse(localStorage.getItem('token'))}` : " "
     }
 })
 
