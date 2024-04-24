@@ -1,0 +1,148 @@
+{
+	"info": {
+		"_postman_id": "f8612628-0e79-42a1-8144-18eb49420e57",
+		"name": "authentication system",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8000/api/v1/auth/register/",
+			"id": "fbdc9676-aedf-4c49-a51f-eb4fe46cadee",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"testuser1@gmail.com\",\n    \"first_name\":\"allan\",\n    \"last_name\":\"mwero\",\n    \"password\":\"test1234\",\n    \"password2\":\"test1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8000/api/v1/auth/register/"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8000/api/v1/auth/verify-email/",
+			"id": "2a8f2814-7b9f-4031-b881-214cfc2f41d6",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"otp\":\"7836\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8000/api/v1/auth/verify-email/"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8000/api/v1/auth/password-reset/",
+			"id": "3fde3696-1b46-482f-b4d5-04a4f18866e7",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"testuser1@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8000/api/v1/auth/password-reset/"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8000/api/v1/auth/password-reset-confirm/Mg/c5xub6-3841782de4fa5cbc8b0d7ac250324f20/",
+			"id": "612d96b2-b683-4e2c-84ef-7fbf458c658e",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8000/api/v1/auth/password-reset-confirm/Mg/c5xub6-3841782de4fa5cbc8b0d7ac250324f20/"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8000/api/v1/auth/set-new-password/",
+			"id": "e48eef4c-d836-4446-8f8d-cc1cf36ca246",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "password",
+							"value": "test123456",
+							"type": "text"
+						},
+						{
+							"key": "confirm_password",
+							"value": "test123456",
+							"type": "text"
+						},
+						{
+							"key": "uidb64",
+							"value": "Mg",
+							"type": "text"
+						},
+						{
+							"key": "token",
+							"value": "c5xub6-3841782de4fa5cbc8b0d7ac250324f20",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8000/api/v1/auth/set-new-password/"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8000/api/v1/auth/login/",
+			"id": "8e02338b-eaaa-4438-ae74-8e76e64d2d58",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"testuser1@gmail.com\",\n    \"password\":\"test1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8000/api/v1/auth/login/"
+			},
+			"response": []
+		}
+	]
+}
