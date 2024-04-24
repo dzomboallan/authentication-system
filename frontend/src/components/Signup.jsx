@@ -57,10 +57,6 @@ const Signup = () => {
         if (code){
             send_code_to_backend()
         }
-
-        return () => {
-            second
-        }
     }, [code])
 
     const handleSigninWithGoogle = async (response)=>{

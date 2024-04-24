@@ -11,8 +11,6 @@ const Login = () => {
         password:""
     })
 
-    const [error, setError] = useState("")
-    const [isLoading, setIsLoading]=useState(false)
 
     const handleOnChange = (e) =>{
         setLogindata({...logindata, [e.target.name]:e.target.value})
@@ -75,11 +73,7 @@ const Login = () => {
 
     const handleSubmit = async (e) =>{
         e.preventDefault()
-        // if (!email || !password){
-        //     setError("email and password are required")
-        // }
         if (logindata){
-            setIsLoading(true)
             const res = await AxiosInstance.post('auth/login/', logindata)
             const response = res.data
             const user ={
@@ -88,8 +82,8 @@ const Login = () => {
             }
 
             if (res.status === 200){
-                localStorage.setItem('access', JSON.stringify(response.access_token))
-                localStorage.setItem('refresh', JSON.stringify(response.refresh_token))
+                localStorage.setItem('token', JSON.stringify(response.access_token))
+                localStorage.setItem('refresh_token', JSON.stringify(response.refresh_token))
                 localStorage.setItem('user', JSON.stringify(user))
                 navigate('/profile')
                 toast.success('login successful')

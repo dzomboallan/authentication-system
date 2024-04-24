@@ -45,9 +45,9 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=255, min_length=6)
     password = serializers.CharField(max_length=68, write_only=True)
-    full_name = serializers.CharField(max_length=255, write_only=True)
-    access_token = serializers.CharField(max_length=255, write_only=True)
-    refresh_token = serializers.CharField(max_length=255, write_only=True)
+    full_name = serializers.CharField(max_length=255, read_only=True)
+    access_token = serializers.CharField(max_length=255, read_only=True)
+    refresh_token = serializers.CharField(max_length=255, read_only=True)
 
     class Meta:
         model = User
@@ -106,12 +106,10 @@ class PasswordResetRequestSerializer(serializers.Serializer):
 
 
 class SetNewPasswordSerializer(serializers.Serializer):
-    password = serializers.CharField(max_length=100, min_length=6,
-                                     write_only=True)
-    confirm_password = serializers.CharField(max_length=100, min_length=6,
-                                             write_only=True)
-    uidb64 = serializers.CharField(write_only=True)
-    token = serializers.CharField(write_only=True)
+    password = serializers.CharField(max_length=100, min_length=6, write_only=True)
+    confirm_password = serializers.CharField(max_length=100, min_length=6, write_only=True)
+    uidb64 = serializers.CharField(min_length=1, write_only=True)
+    token = serializers.CharField(min_length=3, write_only=True)
 
     class Meta:
         fields = ['password', 'confirm_password', 'uidb64', 'token']
@@ -125,19 +123,19 @@ class SetNewPasswordSerializer(serializers.Serializer):
 
             user_id = force_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(id=user_id)
+
             if not PasswordResetTokenGenerator().check_token(user, token):
-                raise AuthenticationFailed
-            ("Reset link is invalid or has expired", 401)
+                raise AuthenticationFailed("reset link is invalid or has expired", 401)
             
             if password != confirm_password:
-                raise AuthenticationFailed("Passwords do not match")
+                raise AuthenticationFailed("passwords do not match")
             
             user.set_password(password)
-            user.save
+            user.save()
             return user
         
         except Exception as e:
-            return AuthenticationFailed("Link is invalid or has expired")
+            return AuthenticationFailed("link is invalid or has expired")
 
 
 class LogoutUserSerializer(serializers.Serializer):

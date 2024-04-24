@@ -6,14 +6,14 @@ import AxiosInstance from '../utils/AxiosInstance'
 const ForgetPassword = () => {
   const navigate = useNavigate()
   const { uid, token } = useParams()
-  const [ newpassword, setNewPassword] = useState({
+  const [ newpasswords, setNewPassword] = useState({
     password:"",
     confirm_password:"",
   })
-  const {password, confirm_password}=newpassword
+  const {password, confirm_password}=newpasswords
 
   const handleChange =(e) =>{
-    setNewPassword({...newpassword, [e.target.name]:e.target.value})
+    setNewPassword({...newpasswords, [e.target.name]:e.target.value})
   }
 
   const data = {
@@ -38,22 +38,32 @@ const ForgetPassword = () => {
 
   return (
     <div>
-      <div className='form-container'>
+        <div className='form-container'>
         <div className='wrapper' style={{width:"100%"}}>
-          <h2>Enter your new password</h2>
-          <form action="" onSubmit={handleSubmit}>
+          <h2>Enter your New Password</h2> 
+            <form action="" onSubmit={handleSubmit}>
             <div className='form-group'>
-              <label htmlFor="">New Password:</label>
-              <input type="text" className='email-form' name='password' onChange={handleChange} />
-            </div>
-            <div className='form-group'>
-              <label htmlFor="">Confirm Password:</label>
-              <input type="text" className='email-form' value={confirm_password} onChange={handleChange} />
-            </div>
-            <button type='submit'className='vbtn' >Submit</button>
-          </form>
+                 <label htmlFor="">New Password:</label>
+                 <input type="text"
+                   className='email-form' 
+                   name="password"
+                   value={password}
+                   onChange={handleChange}     
+                   />    
+               </div>
+               <div className='form-group'>
+                 <label htmlFor="">Confirm Password</label>
+                 <input type="text"
+                   className='email-form' 
+                   name="confirm_password"
+                   value={confirm_password}
+                   onChange={handleChange}              
+                   />    
+               </div>
+               <button type='submit' className='vbtn'>Submit</button>
+            </form>
         </div>
-      </div>
+        </div>
     </div>
   )
 }
