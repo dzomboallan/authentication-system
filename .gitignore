@@ -1,3 +1,7 @@
 # system security passcodes
 .env
-frontend/.env
+.vscode
+.idea
+.coverage*
+staticfiles
+mediafiles
