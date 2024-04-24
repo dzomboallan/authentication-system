@@ -1,2 +1,3 @@
 # system security passcodes
 .env
+frontend/.env
