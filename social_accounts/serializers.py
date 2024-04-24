@@ -4,6 +4,7 @@ from .github import Github
 from django.conf import settings
 from rest_framework.exceptions import AuthenticationFailed
 
+
 class GoogleSignInSerializer(serializers.Serializer):
     access_token = serializers.CharField(min_length=6)
 
@@ -14,7 +15,7 @@ def validate_access_token(self, access_token):
     try:
         user_data['sub']
     except:
-        raise serializers.ValidationError("This token is invalid r has expired!")
+        raise serializers.ValidationError("This token is invalid or has expired!")
     
     if user_data['aud'] != settings.GOOGLE_CLIENT_ID:
         raise AuthenticationFailed(detail="Could not verify user.")
@@ -26,6 +27,7 @@ def validate_access_token(self, access_token):
     provider = "google"
     return register_social_user(provider, email, first_name, last_name)
 
+
 class GithubLoginSerializer(serializers.Serializer):
     code = serializers.CharField()
 
@@ -35,10 +37,11 @@ class GithubLoginSerializer(serializers.Serializer):
         if access_token:
             user_data = Github.get_github_user(access_token)
 
-            full_name=user_data['name']
-            email=user_data['email']
-            names=full_name.split(" ")
-            firstName=names[1]
-            lastName=names[0]
-            provider='github'
+            full_name = user_data['name']
+            email = user_data['email']
+            names = full_name.split(" ")
+            firstName = names[1]
+            lastName = names[0]
+            provider = 'github'
             return register_social_user(provider, email, firstName, lastName)
+        

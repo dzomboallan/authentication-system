@@ -82,8 +82,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "django_rest_auth.wsgi.application"
 
-CORS_ALLOW_ALL_CREDENTIALS=True
-CORS_ALLOW_ALL_ORIGINS=True
+CORS_ALLOW_ALL_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = True
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:5173/"
@@ -100,7 +100,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL="accounts.User"
+AUTH_USER_MODEL = "accounts.User"
 REST_FRAMEWORK = {
     'NON_FIELD_ERROR_KEY':'error',
     'DEFAULT_AUTHENTICATION_CLASSES':(
@@ -114,14 +114,14 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-DOMAIN='localhost:5173'
-SITE_NAME= 'Django Authentication System'
+DOMAIN = 'localhost:5173'
+SITE_NAME = 'Django Authentication System'
 
-GOOGLE_CLIENT_ID=env("GOOGLE_CLIENT_ID")
-GOOGLE_CLIENT_SECRET=env("GOOGLE_CLIENT_SECRET")
-SOCIAL_AUTH_PASSWORD="jghst56787suhjgx"
-GITHUB_CLIENT_ID=env("GITHUB_CLIENT_ID")
-GITHUB_CLIENT_SECRET=env("GITHUB_CLIENT_SECRET")
+GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = env("GOOGLE_CLIENT_SECRET")
+SOCIAL_AUTH_PASSWORD = "jghst56787suhjgx"
+GITHUB_CLIENT_ID = env("GITHUB_CLIENT_ID")
+GITHUB_CLIENT_SECRET = env("GITHUB_CLIENT_SECRET")
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -161,6 +161,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL='larancharm@info.com'
+DEFAULT_FROM_EMAIL = 'larancharm7@gmail.com'
 EMAIL_PORT = '2525'
-EMAIL_USE_TLS=True
+EMAIL_USE_TLS = True
+
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'

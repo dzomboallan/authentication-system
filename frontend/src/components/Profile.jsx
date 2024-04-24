@@ -17,16 +17,16 @@ const Profile = () => {
   }, [jwt, user])
 
   const getSomeData = async ()=>{
-    const res = await AxiosInstance.get('auth/get-something/')
+    const res = await AxiosInstance.get('auth/profile/')
     console.log(res.data)
   }
-  const refresh = JSON.parse(localStorage.getItem('refresh_token'))
+  const refresh = JSON.parse(localStorage.getItem('refresh'))
 
   const handleLogout = async ()=>{
-    const res = await AxiosInstance.post('auth/logout/', {'refresh_token': refresh})
+    const res = await AxiosInstance.post('auth/logout/', {'refresh': refresh})
     if (res.status === 204){
-      localStorage.removeItem('token')
-      localStorage.removeItem('refresh_token')
+      localStorage.removeItem('access')
+      localStorage.removeItem('refresh')
       localStorage.removeItem('user')
       navigate('/login')
       toast.warn("logout successful")

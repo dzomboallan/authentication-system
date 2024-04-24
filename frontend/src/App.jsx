@@ -15,10 +15,10 @@ function App() {
         <Routes>
           <Route path='/' element={<Signup/>} />
           <Route path='/login' element={<Login/>} />
-          <Route path='/dashboard' element={<Profile/>} />
+          <Route path='/profile' element={<Profile/>} />
           <Route path='/otp/verify' element={<VerifyEmail/>} />
-          <Route path='/forget-password' element={<ForgetPassword/>} />
-          <Route path='/password-reset-confirm/:uid/:token' element={<PasswordRequest/>} />
+          <Route path='/forget-password' element={<PasswordRequest/>} />
+          <Route path='/password-reset-confirm/:uid/:token' element={<ForgetPassword/>} />
         </Routes>
       </Router>
     </>

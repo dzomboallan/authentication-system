@@ -11,6 +11,9 @@ const Login = () => {
         password:""
     })
 
+    const [error, setError] = useState("")
+    const [isLoading, setIsLoading]=useState(false)
+
     const handleOnChange = (e) =>{
         setLogindata({...logindata, [e.target.name]:e.target.value})
     }
@@ -20,7 +23,7 @@ const Login = () => {
     }
 
     const handleLoginWithGithub = () =>{
-        window.location.assign(`https://github.com/login/oauth/authorize/?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}`)
+        window.location.assign(`https://github.com/login/oauth/authorize/?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}`)
     }
 
     const send_github__code_to_server = async () =>{
@@ -38,7 +41,7 @@ const Login = () => {
                     localStorage.setItem('token', JSON.stringify(result.access_token))
                     localStorage.setItem('refresh_token', JSON.stringify(result.refresh_token))
                     localStorage.setItem('user', JSON.stringify(user))
-                    navigate('/dashboard')
+                    navigate('/profile')
                     toast.success('login successful')
                 }
             }catch (error){
@@ -59,9 +62,10 @@ const Login = () => {
 
     useEffect(() =>{
         /**global google */
+        const google = window.google
         google.accounts.id.initialize({
-            client_id:process.env.REACT_APP_GOOGLE_CLIENT_ID,
-            claaback: handleLoginWithGoogle
+            client_id:import.meta.env.VITE_GOOGLE_CLIENT_ID,
+            callback: handleLoginWithGoogle
         });
         google.accounts.id.renderButton(
             document.getElementById("signInDiv"),
@@ -71,7 +75,11 @@ const Login = () => {
 
     const handleSubmit = async (e) =>{
         e.preventDefault()
+        // if (!email || !password){
+        //     setError("email and password are required")
+        // }
         if (logindata){
+            setIsLoading(true)
             const res = await AxiosInstance.post('auth/login/', logindata)
             const response = res.data
             const user ={
@@ -80,10 +88,10 @@ const Login = () => {
             }
 
             if (res.status === 200){
-                localStorage.setItem('token', JSON.stringify(response.access_token))
-                localStorage.setItem('refresh_token', JSON.stringify(response.refresh_token))
+                localStorage.setItem('access', JSON.stringify(response.access_token))
+                localStorage.setItem('refresh', JSON.stringify(response.refresh_token))
                 localStorage.setItem('user', JSON.stringify(user))
-                await navigate('/dashboard')
+                navigate('/profile')
                 toast.success('login successful')
             }else{
                 toast.error("Something went wrong")
@@ -100,17 +108,25 @@ const Login = () => {
                 <form onSubmit={handleSubmit}>
                     <div className='form-group'>
                         <label htmlFor="">Email Address:</label>
-                        <input type="text" className='email-form' name='email' value={logindata.email} onChange={handleOnChange}/>
+                        <input type="text"
+                        className='email-form' 
+                        name='email' 
+                        value={logindata.email} 
+                        onChange={handleOnChange}/>
                     </div>
                     <div className='form-group'>
                         <label htmlFor="">Password:</label>
-                        <input type="password" className='email-form' name='password'value={logindata.password} onChange={handleOnChange}/>
+                        <input type="password" 
+                        className='email-form' 
+                        name='password'
+                        value={logindata.password} 
+                        onChange={handleOnChange}/>
                     </div>
                     
                     <input type="submit" value="Login" className='submitButton'/>
                     <p className='pass-link'><Link to={'/forget-password'}>forgot password</Link></p>
                 </form>
-                <h3 className='text-optio'>Or</h3>
+                <h3 className='text-option'>Or</h3>
                 <div className='githubContainer'>
                     <button onClick={handleLoginWithGithub}>Sign in with Github</button>
                 </div>
